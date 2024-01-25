@@ -4,6 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+
+// import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile;
+// import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,23 +23,7 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
-    public static final int frontLeft550 = 1;
-    public static final int frontLeftNeo = 2;
-    public static final int frontRight550 = 3;
-    public static final int frontRightNeo = 4;
-    public static final int backLeft550 = 5;
-    public static final int backLeftNeo = 6;
-    public static final int backRight550 = 7;
-    public static final int backRightNeo = 8;
-
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-
-    
-
-    
-      
-    
   }
 }
