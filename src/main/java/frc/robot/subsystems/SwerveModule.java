@@ -46,12 +46,13 @@ public class SwerveModule extends SubsystemBase{
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);//Motor type suceptible to change
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
+       
         
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-            // driveEncoder = driveMotor.getEncoder();
-            // turningEncoder = turningMotor.getEncoder();
+            driveEncoder = driveMotor.getEncoder();
+             turningEncoder = turningMotor.getEncoder();
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
@@ -82,10 +83,10 @@ public class SwerveModule extends SubsystemBase{
       return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
   }
 
-//   public void resetEncoders() {
-//       driveEncoder.setPosition(0);
-//       turningEncoder.setPosition(getAbsoluteEncoderRad());
-//   }
+  public void resetEncoders() {
+       driveEncoder.setPosition(0);
+       turningEncoder.setPosition(getAbsoluteEncoderRad());
+   }
 
   public SwerveModuleState getState() {
       return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
@@ -106,4 +107,6 @@ public class SwerveModule extends SubsystemBase{
       driveMotor.set(0);
       turningMotor.set(0);
   }
+
+
 }
