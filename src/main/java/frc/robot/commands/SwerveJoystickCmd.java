@@ -26,10 +26,10 @@ public class SwerveJoystickCmd extends Command{
     private SwerveSubsystem swerveSubsystem;
     private SwerveModule swerveModule;
 
-    public SwerveJoystickCmd(SwerveModule swerveModule, SwerveSubsystem swereveSubsystem,
+    public SwerveJoystickCmd( SwerveSubsystem swereveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
             Supplier<Boolean> fieldOrientedFunction) {
-        this.swerveModule = swerveModule;
+        
         this.swerveSubsystem = swereveSubsystem;
         addRequirements(swereveSubsystem, swerveModule);
         this.xSpdFunction = xSpdFunction;
