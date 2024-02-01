@@ -6,55 +6,62 @@
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-//  import java.util.List;
+  import java.util.List;
 
-// import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.math.controller.ProfiledPIDController;
-// import edu.wpi.first.math.geometry.Pose2d;
-// import edu.wpi.first.math.geometry.Rotation2d;
-// import edu.wpi.first.math.geometry.Translation2d;
-// import edu.wpi.first.math.trajectory.TrajectoryConfig;
-// import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-// import edu.wpi.first.wpilibj.Joystick;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-// import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-// import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import frc.robot.Constants.AutoConstants;
-// import frc.robot.Constants.DriveConstants;
-// import frc.robot.Constants.OIConstants;
+ import edu.wpi.first.math.controller.PIDController;
+ import edu.wpi.first.math.controller.ProfiledPIDController;
+ import edu.wpi.first.math.geometry.Pose2d;
+ import edu.wpi.first.math.geometry.Rotation2d;
+ import edu.wpi.first.math.geometry.Translation2d;
+ import edu.wpi.first.math.trajectory.TrajectoryConfig;
+ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+ import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+ import edu.wpi.first.wpilibj2.command.InstantCommand;
+ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AutoConstants;
+ import frc.robot.Constants.DriveConstants;
+ import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.SwerveModule;
+import frc.robot.subsystems.SwerveSubsystem;
 
 
-// /**
-//  * This class is where the bulk of the robot should be declared. Since Command-based is a
-//  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
-//  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
-//  * subsystems, commands, and trigger mappings) should be declared here.
-//  */
+ /**
+  * This class is where the bulk of the robot should be declared. Since Command-based is a
+  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+  * subsystems, commands, and trigger mappings) should be declared here.
+  */
  public class RobotContainer {
 
-//     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+     
+      public final static XboxController xboxController = new XboxController(0);
+     
+  
+     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
 
-//     private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
+     public RobotContainer() {
+      swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
+                 swerveSubsystem,
+                 () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
+        
+     }
 
-//     public RobotContainer() {
-//         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-//                 swerveSubsystem,
-//                 () -> -driverJoytick.getRawAxis(OIConstants.kDriverYAxis),
-//                 () -> driverJoytick.getRawAxis(OIConstants.kDriverXAxis),
-//                 () -> driverJoytick.getRawAxis(OIConstants.kDriverRotAxis),
-//                 () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
-
-//         configureButtonBindings();
-//     }
-
-//     private void configureButtonBindings() {
-//         new JoystickButton(driverJoytick, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
-//     }
+    private void configureButtonBindings() {
+    }
 
     public Command getAutonomousCommand() {
       return null;
+
+        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 //         // 1. Create trajectory settings
 //         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
 //                 AutoConstants.kMaxSpeedMetersPerSecond,
@@ -93,5 +100,5 @@ import edu.wpi.first.wpilibj2.command.Command;
 //                 new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
 //                 swerveControllerCommand,
 //                 new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
  }
+}
