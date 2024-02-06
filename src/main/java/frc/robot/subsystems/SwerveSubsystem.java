@@ -78,11 +78,8 @@ public class SwerveSubsystem extends SubsystemBase {
     //         backLeft.getPosition(),
     //         backRight.getPosition()
     //       }, new Pose2d(0, 0, new Rotation2d()));
-    // ChassisSpeeds speeds = new ChassisSpeeds(0,0,0);
 
      public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    // speeds = new ChassisSpeeds( xSpeed,  ySpeed,  rot);
-    // SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
     var swerveModuleStates =
     DriveConstants.kDriveKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
@@ -92,10 +89,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 : new ChassisSpeeds(xSpeed, ySpeed, rot),
             DriveConstants.kDrivePeriod));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
+    // Manually change offset parameter for respective wheel
+    frontLeft.setDesiredState(swerveModuleStates[0], 0);
+    frontRight.setDesiredState(swerveModuleStates[1],  -90);
+    backLeft.setDesiredState(swerveModuleStates[2],  0);
+    backRight.setDesiredState(swerveModuleStates[3], -90);
   }
 
 
