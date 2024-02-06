@@ -29,6 +29,7 @@ public final class Constants {
   }
   
   public static final class ModuleConstants {
+    public static final double[] offsets = {0, Math.PI/2, 0, Math.PI/2};
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 5.8462;
     public static final double kTurningMotorGearRatio = 1 / 18.0;

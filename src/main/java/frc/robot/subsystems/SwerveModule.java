@@ -33,6 +33,8 @@ public class SwerveModule extends SubsystemBase{
     private final AnalogInput analogEncoder;
     private final boolean absoluteEncoderReversed;
 
+    public final static double[] offsets_object = ModuleConstants.offsets;
+
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int absoluteEncoderId, boolean absoluteEncoderReversed) {
@@ -74,16 +76,29 @@ public class SwerveModule extends SubsystemBase{
       return new SwerveModuleState(getTurningVelocity(), new Rotation2d(getTurningPosition()));
   }
 
-  public void setDesiredState(SwerveModuleState state) {
+  public void setDesiredState(SwerveModuleState state, int offset) {
       if (Math.abs(state.speedMetersPerSecond) < 0.001) {
           stop();
           return;
       }
-      state = SwerveModuleState.optimize(state, getState().angle);
+      double offset_double = offset;
+      Rotation2d offset_wheels = new Rotation2d(offset_double);
+      state = optimize2(state, getState().angle, offset_wheels);
       turningMotor.set(turningPidControler.calculate(getTurningPosition(), state.angle.getRadians()));
       SmartDashboard.putString("Swerve[" + analogEncoder.getChannel() + "] state", state.toString());
   }
-
+  public static SwerveModuleState optimize2(
+      SwerveModuleState desiredState, Rotation2d currentAngle, Rotation2d offseRotation2d) {
+    currentAngle = offseRotation2d.plus(currentAngle);
+    var delta = desiredState.angle.minus(currentAngle);
+    if (Math.abs(delta.getDegrees()) > 90.0) {
+      return new SwerveModuleState(
+          -desiredState.speedMetersPerSecond,
+          desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+    } else {
+      return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+    }
+  }
 
   public void stop() {
       driveMotor.set(0);
