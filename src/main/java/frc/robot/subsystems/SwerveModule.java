@@ -20,18 +20,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-
+import frc.robot.Constants.OIConstants;
 public class SwerveModule extends SubsystemBase{
 
     private CANSparkMax driveMotor;
     private CANSparkMax turningMotor;
 
-    private AbsoluteEncoder turningEncoder;
+    private AbsoluteEncoder absoluteEncoder;
+
 
     private PIDController turningPidControler;
 
-    private final AnalogInput absoluteEncoder;
+    private final AnalogInput analogEncoder;
     private final boolean absoluteEncoderReversed;
+
+
+    public final static double[] offsets_object = ModuleConstants.offsets;
+
 
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
@@ -39,7 +44,7 @@ public class SwerveModule extends SubsystemBase{
 
 
         this.absoluteEncoderReversed = absoluteEncoderReversed;
-        absoluteEncoder = new AnalogInput(absoluteEncoderId);
+        analogEncoder = new AnalogInput(absoluteEncoderId);
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);//Motor type suceptible to change
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
@@ -48,9 +53,11 @@ public class SwerveModule extends SubsystemBase{
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-             turningEncoder = (AbsoluteEncoder) turningMotor.getEncoder();
-        turningEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        turningEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
+
+             absoluteEncoder = (AbsoluteEncoder) turningMotor.getEncoder();
+        absoluteEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
+        absoluteEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
+
 
         turningPidControler = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidControler.enableContinuousInput(-Math.PI, Math.PI);
@@ -59,13 +66,15 @@ public class SwerveModule extends SubsystemBase{
 
 
      public double getTurningPosition(){
-        return turningEncoder.getPosition();
+
+        return absoluteEncoder.getPosition();
+
      }
      public double getTurningVelocity(){
-        return turningEncoder.getVelocity();
+        return absoluteEncoder.getVelocity();
      }
      public double getAbsoluteEncoderRad() {
-      double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+      double angle = analogEncoder.getVoltage() / RobotController.getVoltage5V();
       angle *= 2.0 * Math.PI;
       return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
   }
@@ -74,14 +83,30 @@ public class SwerveModule extends SubsystemBase{
       return new SwerveModuleState(getTurningVelocity(), new Rotation2d(getTurningPosition()));
   }
 
-  public void setDesiredState(SwerveModuleState state) {
+  public void setDesiredState(SwerveModuleState state, int offset) {
       if (Math.abs(state.speedMetersPerSecond) < 0.001) {
           stop();
           return;
       }
-      state = SwerveModuleState.optimize(state, getState().angle);
+
+      double offset_double = offset;
+      Rotation2d offset_wheels = new Rotation2d(offset_double);
+      state = optimize2(state, getState().angle, offset_wheels);
+
       turningMotor.set(turningPidControler.calculate(getTurningPosition(), state.angle.getRadians()));
-      SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
+      SmartDashboard.putString("Swerve[" + analogEncoder.getChannel() + "] state", state.toString());
+  }
+  public static SwerveModuleState optimize2(
+      SwerveModuleState desiredState, Rotation2d currentAngle, Rotation2d offseRotation2d) {
+    currentAngle = offseRotation2d.plus(currentAngle);
+    var delta = desiredState.angle.minus(currentAngle);
+    if (Math.abs(delta.getDegrees()) > 90.0) {
+      return new SwerveModuleState(
+          -desiredState.speedMetersPerSecond,
+          desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+    } else {
+      return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+    }
   }
 
   public void stop() {
