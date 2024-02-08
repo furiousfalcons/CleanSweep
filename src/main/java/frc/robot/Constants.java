@@ -29,6 +29,7 @@ public final class Constants {
   }
   
   public static final class ModuleConstants {
+
     public static final double[] offsets = {0, Math.PI/2, 0, Math.PI/2};
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 5.8462;
@@ -38,7 +39,9 @@ public final class Constants {
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
     public static final double kPTurning = 0.5;
+
     public static final double kPModuleDriveController = 1.0;
+
 }
 
 public static final class DriveConstants {
@@ -90,6 +93,7 @@ public static final class DriveConstants {
 
      public static final double kDrivePeriod = TimedRobot.kDefaultPeriod;
 
+
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
@@ -119,7 +123,9 @@ public static final class AutoConstants {
 public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
 
+
     public static final int kDriverYAxis = 1;   
+
     public static final int kDriverXAxis = 0;
     public static final int kDriverRotAxis = 4;
     public static final int kDriverFieldOrientedButtonIdx = 1;

@@ -28,12 +28,15 @@ public class SwerveModule extends SubsystemBase{
 
     private AbsoluteEncoder absoluteEncoder;
 
+
     private PIDController turningPidControler;
 
     private final AnalogInput analogEncoder;
     private final boolean absoluteEncoderReversed;
 
+
     public final static double[] offsets_object = ModuleConstants.offsets;
+
 
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
@@ -50,9 +53,11 @@ public class SwerveModule extends SubsystemBase{
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
+
              absoluteEncoder = (AbsoluteEncoder) turningMotor.getEncoder();
         absoluteEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         absoluteEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
+
 
         turningPidControler = new PIDController(ModuleConstants.kPTurning, 0, 0);
         turningPidControler.enableContinuousInput(-Math.PI, Math.PI);
@@ -61,7 +66,9 @@ public class SwerveModule extends SubsystemBase{
 
 
      public double getTurningPosition(){
+
         return absoluteEncoder.getPosition();
+
      }
      public double getTurningVelocity(){
         return absoluteEncoder.getVelocity();
@@ -81,9 +88,11 @@ public class SwerveModule extends SubsystemBase{
           stop();
           return;
       }
+
       double offset_double = offset;
       Rotation2d offset_wheels = new Rotation2d(offset_double);
       state = optimize2(state, getState().angle, offset_wheels);
+
       turningMotor.set(turningPidControler.calculate(getTurningPosition(), state.angle.getRadians()));
       SmartDashboard.putString("Swerve[" + analogEncoder.getChannel() + "] state", state.toString());
   }

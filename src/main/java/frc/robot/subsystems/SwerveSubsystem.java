@@ -12,10 +12,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 // import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 // import edu.wpi.first.math.kinematics.SwerveModulePosition;
+
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftDriveMotorReversed,
             DriveConstants.kFrontLeftTurningMotorReversed,
             DriveConstants.kFrontLeftTurningAbsoluteEncoderPort,
+
             DriveConstants.kFrontLeftTurningAbsoluteEncoderReversed);//Ask about encoder reversed
 
     private final SwerveModule frontRight = new SwerveModule(
@@ -66,6 +69,7 @@ public class SwerveSubsystem extends SubsystemBase {
       new Translation2d(DriveConstants.kWheelBase / 2, DriveConstants.kTrackWidth / 2),
       new Translation2d(-DriveConstants.kWheelBase / 2, -DriveConstants.kTrackWidth / 2),
       new Translation2d(-DriveConstants.kWheelBase / 2, DriveConstants.kTrackWidth / 2));
+
     // Odometry for bot that is not functioning
     //   double angleValue = gyro.getGyroAngleZ();
     //   SwerveDriveOdometry m_odometry =
@@ -119,8 +123,9 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
      }
 
-  
+
   /** Resets the drive encoders to currently read a position of 0. */
+
 
 
      
@@ -143,6 +148,7 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.stop();
     }
 
+
     // public void setModuleStates(SwerveModuleState[] desiredStates) {
     //     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
     //     frontLeft.setDesiredState(desiredStates[0]);
@@ -150,5 +156,6 @@ public class SwerveSubsystem extends SubsystemBase {
     //     backLeft.setDesiredState(desiredStates[2]);
     //     backRight.setDesiredState(desiredStates[3]); 
     // }
+
     
 }
