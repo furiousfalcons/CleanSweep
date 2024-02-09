@@ -40,6 +40,12 @@ public class Arm extends PIDSubsystem {
         return armEncoder.getDistance(); 
     }
 
+    @Override
+    protected void useOutput(double output, double setpoint) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'useOutput'");
+    }
+
    
 
 }

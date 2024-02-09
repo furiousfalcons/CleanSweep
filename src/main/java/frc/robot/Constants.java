@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 // import edu.wpi.first.math.geometry.Translation2d;
@@ -132,4 +133,11 @@ public static final class OIConstants {
 
     public static final double kDeadband = 0.05;
 }
+
+public static final int InTakeShooterMotor = 0;
+public static double inTakeMotorSpeed;
+public static double shootMotorSpeed;
+public static long shooterTime;
+public static int armMotor;
+public static AnalogInput armEncoder;
 }
