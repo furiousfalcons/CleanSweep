@@ -21,9 +21,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
  import edu.wpi.first.wpilibj2.command.InstantCommand;
- import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
- import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
@@ -48,7 +50,7 @@ import frc.robot.subsystems.SwerveSubsystem;
      
 
       public final static XboxController xboxController = new XboxController(0);
-
+      public static CommandXboxController primaryDriver = new CommandXboxController(0);
      
   
      private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
@@ -60,10 +62,23 @@ import frc.robot.subsystems.SwerveSubsystem;
 
                  () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
         
+                 configureButtonBindings(); //CONFIGURE BINDINGS
      }
+     private void configureButtonBindinGS(){
+       //DEFINE ALL OF THE BUTTON BINDINGS HERE PLEASE AND THANKS
+       primaryDriver.rightBumper()
+       .whileTrue(new RunCommand(
+           () -> swerveSubsystem.setWheelsX(),
+           swerveSubsystem));
 
-    private void configureButtonBindings() {
-    }
+  //          primaryDriver.a()
+  //          .whileTrue(new TurnToAngle
+  //              (drivetrain));
+
+  //  primaryDriver.b()
+  //    .whileTrue(new APTAdjust
+  //      (SwerveSubsystem));
+}
 
     public Command getAutonomousCommand() {
       return null;
