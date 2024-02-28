@@ -1,30 +1,38 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
+
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import com.ctre.phoenix6.signals.ControlModeValue;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IntakeShooter {
-    private NetworkTable tableInTakeShooter = NetworkTableInstance.getDefault().getTable("InTakeShooter");
-    private Spark inTakeShooterMotor;
+public class InTakeShooter extends SubsystemBase {
+     private NetworkTable tableInTakeShooter = NetworkTableInstance.getDefault().getTable("InTakeShooter");
+    private CANSparkMax inTakeShooterMotor;
     private DigitalInput colorSensor;
     private long time;
     private boolean isPickingUp;
     private boolean isShooting;
     private Arm arm;
 
-    public IntakeShooter() {
+    //Note that the InTake and shooter mecanism is the same physical object
+    public InTakeShooter() {
         colorSensor = new DigitalInput(1);
-        inTakeShooterMotor = new Spark(Constants.InTakeShooterMotor);
+        inTakeShooterMotor = new CANSparkMax(Constants.inTakeMotor, MotorType.kBrushless);
         time = System.currentTimeMillis(); // Last action time for shooter
-        arm = new Arm(); // Initialize the Arm
+         // Initialize the Arm
     }
 
     public void inTake() {
-        if (!colorSensor.get() || isShooting) { // If object is inside or shooting, then stop
+        if (!colorSensor.get() ) { // If object is inside, then stop
             isPickingUp = false;
             inTakeShooterMotor.set(0.0);
             tableInTakeShooter.getEntry("InTake").setBoolean(false);
@@ -40,10 +48,9 @@ public class IntakeShooter {
             isShooting = true;
             inTakeShooterMotor.set(Constants.shootMotorSpeed);
             tableInTakeShooter.getEntry("Shoot").setBoolean(true);
-            if (System.currentTimeMillis() - time > Constants.shooterTime) { // Stop if certain time is elapsed
-                stop();
-                arm.armDown();
-            }
+            /* Removed timed section as having the shooting set to a hold button gives more control,
+            for when unexpected issues arise */
+            
         }
     }
 
@@ -54,4 +61,10 @@ public class IntakeShooter {
         tableInTakeShooter.getEntry("Shoot").setBoolean(false);
         tableInTakeShooter.getEntry("InTake").setBoolean(false);
     }
+    //return if robot is currently picking up ring
+    public boolean isTakingIn()
+    {
+      return isPickingUp;
+    }
 }
+
