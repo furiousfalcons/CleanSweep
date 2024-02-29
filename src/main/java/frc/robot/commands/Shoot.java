@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.InTakeShooter;
@@ -29,6 +30,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     inTakeShooter.shoot();
+    SmartDashboard.putBoolean("Is Shooting", inTakeShooter.isCurrentlyShooting());
   }
 
   // Called once the command ends or is interrupted.

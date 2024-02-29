@@ -64,7 +64,12 @@ public class InTakeShooter extends SubsystemBase {
     //return if robot is currently picking up ring
     public boolean isTakingIn()
     {
-      return isPickingUp;
+        return isPickingUp;
+    }
+    //return if the robot is currently shooting a ring
+    public boolean isCurrentlyShooting()
+    {
+        return isShooting;
     }
 }
 
