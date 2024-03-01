@@ -13,16 +13,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ArmDown;
-import frc.robot.commands.ArmUp;
 import frc.robot.commands.InTake;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.InTakeShooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,9 +42,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private  Arm arm = new Arm();
   private InTakeShooter intakeShooter = new InTakeShooter();
+  private Climb climb = new Climb();
 
-  private final ArmUp armUp = new ArmUp(arm);
-  private final ArmDown armDown = new ArmDown(arm);
   private final InTake inTake = new InTake(intakeShooter);
   private final Shoot shoot = new Shoot(intakeShooter);
   // The driver's controller
@@ -88,8 +87,6 @@ public class RobotContainer {
     JoystickButton bButton = new JoystickButton(m_driverController, 2);
     inTakeButton.whileTrue(inTake);
     shootButton.whileTrue(shoot);
-    bButton.whileTrue(armDown);
-    aButton.whileTrue(armUp);
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -140,5 +137,9 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+  }
+
+  public void logTheBits() {
+    // DriverStation.reportError(arm.getMeasurement()  +"", false);
   }
 }

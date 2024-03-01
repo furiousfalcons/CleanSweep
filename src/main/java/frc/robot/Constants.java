@@ -35,6 +35,7 @@ public final class Constants {
   public static final int armEncoder = 0;
 
   public static final double encoderMax = 0;
+  public static final int noteDistnace = 0;
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds

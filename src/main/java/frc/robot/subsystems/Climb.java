@@ -9,18 +9,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climb extends SubsystemBase {
   /** Creates a new Climb. */
 
   CANSparkMax climbMotor;
 
-  public Climb() {}
+  public Climb() {
+    climbMotor = new CANSparkMax(12, MotorType.kBrushless);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    climbMotor = new CANSparkMax(12, MotorType.kBrushless);
+    
   }
 
   public void climbUp() {

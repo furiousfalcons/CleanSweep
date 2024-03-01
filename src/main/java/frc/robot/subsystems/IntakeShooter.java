@@ -6,33 +6,44 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class InTakeShooter extends SubsystemBase {
      private NetworkTable tableInTakeShooter = NetworkTableInstance.getDefault().getTable("InTakeShooter");
     private CANSparkMax inTakeShooterMotor;
-    private DigitalInput colorSensor;
+    private ColorSensorV3 colorSensor;
     private long time;
     private boolean isPickingUp;
     private boolean isShooting;
-    private Arm arm;
+    private I2C.Port i2cPort;
+    int proximity;
 
     //Note that the InTake and shooter mecanism is the same physical object
     public InTakeShooter() {
-        colorSensor = new DigitalInput(1);
-        inTakeShooterMotor = new CANSparkMax(Constants.inTakeMotor, MotorType.kBrushless);
+        i2cPort = I2C.Port.kOnboard;
+        colorSensor = new ColorSensorV3(i2cPort);
+        inTakeShooterMotor = new CANSparkMax(11, MotorType.kBrushless);
         time = System.currentTimeMillis(); // Last action time for shooter
-         // Initialize the Arm
+        
+    }
+
+    @Override
+    public void periodic() {
+        proximity = colorSensor.getProximity();
+     //   System.out.println(proximity);
     }
 
     public void inTake() {
-        if (!colorSensor.get() ) { // If object is inside, then stop
+        if (proximity > 95 ) { // If object is inside, then stop
             isPickingUp = false;
             inTakeShooterMotor.set(0.0);
             tableInTakeShooter.getEntry("InTake").setBoolean(false);
@@ -40,7 +51,8 @@ public class InTakeShooter extends SubsystemBase {
             isPickingUp = true;
             inTakeShooterMotor.set( Constants.inTakeMotorSpeed);
             tableInTakeShooter.getEntry("InTake").setBoolean(true); // Takes in ring
-        }
+        } 
+        
     }
 
     public void shoot() {
