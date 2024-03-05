@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ArmDown;
+import frc.robot.commands.ArmUp;
+import frc.robot.commands.ClimbUp;
 import frc.robot.commands.InTake;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Arm;
@@ -46,6 +49,9 @@ public class RobotContainer {
 
   private final InTake inTake = new InTake(intakeShooter);
   private final Shoot shoot = new Shoot(intakeShooter);
+  private final ArmUp armUp = new ArmUp(arm);
+  private final ArmDown armDown = new ArmDown(arm);
+  private final ClimbUp climbUp = new ClimbUp(climb);
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -81,10 +87,12 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    JoystickButton climbUpButton = new JoystickButton(m_driverController, 1);
+    JoystickButton armDownButton = new JoystickButton(m_driverController, 2);
     JoystickButton inTakeButton = new JoystickButton(m_driverController, 3);
     JoystickButton shootButton = new JoystickButton(m_driverController, 4);
-    JoystickButton aButton = new JoystickButton(m_driverController, 1);
-    JoystickButton bButton = new JoystickButton(m_driverController, 2);
+    climbUpButton.whileTrue(climbUp);
+    armDownButton.whileTrue(armDown);
     inTakeButton.whileTrue(inTake);
     shootButton.whileTrue(shoot);
     new JoystickButton(m_driverController, Button.kR1.value)
@@ -95,12 +103,11 @@ public class RobotContainer {
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+ * @return 
    */
-  public Command getAutonomousCommand() {
+  public Object getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
+   /*  TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
@@ -134,11 +141,11 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
+ 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
-
+*/  return null;}
   public void logTheBits() {
     // DriverStation.reportError(arm.getMeasurement()  +"", false);
   }

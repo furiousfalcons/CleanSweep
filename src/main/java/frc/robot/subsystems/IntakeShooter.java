@@ -43,22 +43,22 @@ public class InTakeShooter extends SubsystemBase {
     }
 
     public void inTake() {
-        if (proximity > 95 ) { // If object is inside, then stop
-            isPickingUp = false;
-            inTakeShooterMotor.set(0.0);
-            tableInTakeShooter.getEntry("InTake").setBoolean(false);
-        } else {
+       // if (proximity > 95 ) { // If object is inside, then stop
+          //  isPickingUp = false;
+           // inTakeShooterMotor.set(0.0);
+           // tableInTakeShooter.getEntry("InTake").setBoolean(false);
+     //   } else {
             isPickingUp = true;
             inTakeShooterMotor.set( Constants.inTakeMotorSpeed);
             tableInTakeShooter.getEntry("InTake").setBoolean(true); // Takes in ring
-        } 
+       // } 
         
     }
 
     public void shoot() {
         if (!isPickingUp) { // If object is not getting picked up, then continue
             isShooting = true;
-            inTakeShooterMotor.set(Constants.shootMotorSpeed);
+            inTakeShooterMotor.set(-Constants.shootMotorSpeed);
             tableInTakeShooter.getEntry("Shoot").setBoolean(true);
             /* Removed timed section as having the shooting set to a hold button gives more control,
             for when unexpected issues arise */

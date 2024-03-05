@@ -4,23 +4,18 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.InTakeShooter;
+import frc.robot.subsystems.Arm;
 
 
-public class Shoot extends Command {
-  /** Creates a new ClawGrab. */
-  InTakeShooter inTakeShooter;
-  public Shoot(InTakeShooter subsystem) {
-    inTakeShooter = subsystem;
-    addRequirements(subsystem);
+public class ArmUp extends Command {
+  Arm arm;
+  /** Creates a new ArmUp. */
+  public ArmUp(Arm subsytem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    arm = subsytem;
+    addRequirements(subsytem);
   }
-
-
-  
 
   // Called when the command is initially scheduled.
   @Override
@@ -29,20 +24,16 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    inTakeShooter.shoot();
-    SmartDashboard.putBoolean("Is Shooting", inTakeShooter.isCurrentlyShooting());
+    arm.armUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    inTakeShooter.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
     return false;
   }
 }
